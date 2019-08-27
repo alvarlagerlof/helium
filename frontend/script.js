@@ -20,7 +20,7 @@ function main() {
   controls.update();
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('grey');
+  scene.background = new THREE.Color('white');
 
   {
     const color = 0xFFFFFF;
@@ -30,37 +30,680 @@ function main() {
     scene.add(light);
   }
 
-  const cell = new Uint8Array(cellSize * cellSize * cellSize);
-  for (let y = 0; y < cellSize; ++y) {
-    for (let z = 0; z < cellSize; ++z) {
-      for (let x = 0; x < cellSize; ++x) {
-        const height = (Math.sin(x / cellSize * Math.PI * 4) + Math.sin(z / cellSize * Math.PI * 6)) * 20 + cellSize / 2;
-        if (height > y && height < y + 1) {
-          const offset = y * cellSize * cellSize +
-                       z * cellSize +
-                       x;
-          cell[offset] = 1;
+  // const cell = new Uint8Array(cellSize * cellSize * cellSize);
+  // for (let y = 0; y < cellSize; ++y) {
+  //   for (let z = 0; z < cellSize; ++z) {
+  //     for (let x = 0; x < cellSize; ++x) {
+  //       const height = (Math.sin(x / cellSize * Math.PI * 4) + Math.sin(z / cellSize * Math.PI * 6)) * 20 + cellSize / 2;
+  //       if (height > y && height < y + 1) {
+  //         const offset = y * cellSize * cellSize +
+  //                      z * cellSize +
+  //                      x;
+  //         cell[offset] = 1;
+  //       }
+  //     }
+  //   }
+  // }
+
+  // console.log(cell[0]);
+
+  // const geometry = new THREE.BoxBufferGeometry(1, 1, 1);
+  // const material = new THREE.MeshPhongMaterial({color: 'green'});
+
+  // for (let y = 0; y < cellSize; ++y) {
+  //   for (let z = 0; z < cellSize; ++z) {
+  //     for (let x = 0; x < cellSize; ++x) {
+  //       const offset = y * cellSize * cellSize +
+  //                      z * cellSize +
+  //                      x;
+  //       const block = cell[offset];
+  //       if (block) {
+  //         const mesh = new THREE.Mesh(geometry, material);
+  //         mesh.position.set(x, y, z);
+  //         scene.add(mesh);
+  //       }
+  //     }
+  //   }
+  // }
+
+  const s = 10;
+
+  const data = {
+    x0z0: {
+      updated: false, 
+      blocks: [
+        [[{type: "block", "material": "wood", object: null}]],
+        [[{type: "block", "material": "wood", object: null}]],
+        [[{type: "block", "material": "wood", object: null}]],
+        [[{type: "block", "material": "leaf", object: null}]]
+      ]
+    },
+    x0z1: {
+      updated: false, 
+      blocks: [
+        [
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ]
+        ],
+        [
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "sand", object: null},
+            {type: "block", "material": "air", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ],
+          [
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "grass", object: null},
+            {type: "block", "material": "water", object: null},
+            {type: "block", "material": "grass", object: null},
+          ]
+        ],
+        
+    ]
+    }
+  }
+
+  for (const key of Object.keys(data)) {
+    if (!data[key].updated) {
+      
+      let chunkCords = {
+        x: key.substring(key.lastIndexOf("x") + 1, key.lastIndexOf("z")),
+        z: key.split('z').pop()
+      }
+
+      for (let y = 0; y < data[key].blocks.length; y++) {
+        for (let x = 0; x < data[key].blocks[y].length; x++) {
+          for (let z = 0; z < data[key].blocks[y][x].length; z++) {
+            if (data[key].blocks[y][x][z].material != "air") {
+              const geometry = new THREE.BoxBufferGeometry(1*s, 1*s, 1*s);
+              const material = new THREE.MeshPhongMaterial({color: materialToColor(data[key].blocks[y][x][z].material)});
+            
+              const mesh = new THREE.Mesh(geometry, material);
+              mesh.position.set((x+(chunkCords.x*16))*s, y*s, (z+(chunkCords.z*16))*s);
+              scene.add(mesh);
+              data[key].blocks[y][x][z].object = mesh;
+            }
+          }
         }
       }
     }
   }
 
-  const geometry = new THREE.BoxBufferGeometry(1, 1, 1);
-  const material = new THREE.MeshPhongMaterial({color: 'green'});
-
-  for (let y = 0; y < cellSize; ++y) {
-    for (let z = 0; z < cellSize; ++z) {
-      for (let x = 0; x < cellSize; ++x) {
-        const offset = y * cellSize * cellSize +
-                       z * cellSize +
-                       x;
-        const block = cell[offset];
-        if (block) {
-          const mesh = new THREE.Mesh(geometry, material);
-          mesh.position.set(x, y, z);
-          scene.add(mesh);
-        }
-      }
+  function materialToColor(material) {
+    switch(material) {
+      case "grass":
+        return "lime";
+      case "water":
+        return "blue";
+      case "sand":
+        return "yellow";
+      case "wood":
+          return "brown";
+      case "leaf":
+        return "green";
     }
   }
 
