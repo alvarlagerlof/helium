@@ -3,13 +3,14 @@ package com.alvarlagerlof.helium;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.ChatColor;
-
 import co.aikar.commands.PaperCommandManager;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import com.alvarlagerlof.helium.Commands;
+import com.alvarlagerlof.helium.Socket;
+
 
 
 public final class Main extends JavaPlugin implements Listener {
@@ -18,12 +19,17 @@ public final class Main extends JavaPlugin implements Listener {
 
     public void onEnable() {
 
+        // Listen for events
         getServer().getPluginManager().registerEvents(this, this);
 
-        conf = this.getConfig();
-
+        // Setup command manager
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new Commands(this));
 
+        // Set up websocket        
+		Socket s = new Socket(8080);
+		s.start();
+        System.out.println( "ChatServer started on port: " + s.getPort());
+        
     }
 }

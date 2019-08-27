@@ -707,7 +707,7 @@ function main() {
     }
   }
 
-  let socket = new WebSocket("wss://javascript.info/article/websocket/demo/hello");
+  let socket = new WebSocket("ws://ravla.org:8080");
 
   socket.onopen = function(e) {
     console.log("[open] Connection established");

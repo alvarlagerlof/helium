@@ -5,9 +5,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
 
-import java.util.ArrayList;
-import java.util.Set;
-
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.CommandAlias;
