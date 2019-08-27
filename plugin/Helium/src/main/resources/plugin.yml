@@ -1,0 +1,4 @@
+main: com.alvarlagerlof.helium.Main
+name: Helium
+version: 0.1
+api-version: 1.14
