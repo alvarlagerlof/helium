@@ -231,38 +231,41 @@ function main() {
         tileTextureHeight,
     });
 
-    const worldSize = 64;
+    const worldSize = 16;
 
     for (let y = 0; y < worldSize; ++y) {
         for (let z = 0; z < worldSize; ++z) {
             for (let x = 0; x < worldSize; ++x) {
-                world.setVoxel(x, y, z, randInt(1, 17));
-                // const height = (Math.sin(x / cellSize * Math.PI * 2) + Math.sin(z / cellSize * Math.PI * 3)) * (cellSize / 6) + (cellSize / 2);
-                // if (y < height) {
-                //     world.setVoxel(x, y, z, randInt(1, 17));
-                // }
+                //world.setVoxel(x, y, z, randInt(1, 17));
+                const height = (Math.sin(x / cellSize * Math.PI * 2) + Math.sin(z / cellSize * Math.PI * 3)) * (cellSize / 6) + (cellSize / 2);
+                if (y < height) {
+                    world.setVoxel(x, y, z, randInt(1, 17));
+                }
             }
         }
     }
+    
 
-    const {positions, normals, uvs, indices} = world.generateGeometryDataForCell(0, 0, 0);
-    const geometry = new THREE.BufferGeometry();
-    const material = new THREE.MeshLambertMaterial({
-        map: texture,
-        side: THREE.DoubleSide,
-        alphaTest: 0.1,
-        transparent: true,
-    });
-
-    const positionNumComponents = 3;
-    const normalNumComponents = 3;
-    const uvNumComponents = 2;
-    geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), positionNumComponents));
-    geometry.addAttribute('normal', new THREE.BufferAttribute(new Float32Array(normals), normalNumComponents));
-    geometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), uvNumComponents));
-    geometry.setIndex(indices);
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+    function genrateMesh() {
+        const {positions, normals, uvs, indices} = world.generateGeometryDataForCell(0, 0, 0);
+        const geometry = new THREE.BufferGeometry();
+        const material = new THREE.MeshLambertMaterial({
+            map: texture,
+            side: THREE.DoubleSide,
+            alphaTest: 0.1,
+            transparent: true,
+        });
+    
+        const positionNumComponents = 3;
+        const normalNumComponents = 3;
+        const uvNumComponents = 2;
+        geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), positionNumComponents));
+        geometry.addAttribute('normal', new THREE.BufferAttribute(new Float32Array(normals), normalNumComponents));
+        geometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), uvNumComponents));
+        geometry.setIndex(indices);
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+    }
 
     function randInt(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
@@ -289,6 +292,9 @@ function main() {
             camera.aspect = canvas.clientWidth / canvas.clientHeight;
             camera.updateProjectionMatrix();
         }
+
+        world.setVoxel(randInt(0, cellSize), randInt(0, cellSize), randInt(0, cellSize), randInt(1, 17));
+        genrateMesh()
 
         controls.update();
         renderer.render(scene, camera);
