@@ -246,26 +246,27 @@ function main() {
     }
     
 
-    function genrateMesh() {
-        const {positions, normals, uvs, indices} = world.generateGeometryDataForCell(0, 0, 0);
-        const geometry = new THREE.BufferGeometry();
-        const material = new THREE.MeshLambertMaterial({
-            map: texture,
-            side: THREE.DoubleSide,
-            alphaTest: 0.1,
-            transparent: true,
-        });
+    const {positions, normals, uvs, indices} = world.generateGeometryDataForCell(0, 0, 0);
+    const geometry = new THREE.BufferGeometry();
+    const material = new THREE.MeshLambertMaterial({
+        map: texture,
+        side: THREE.DoubleSide,
+        alphaTest: 0.1,
+        transparent: true,
+    });
+
+    const positionNumComponents = 3;
+    const normalNumComponents = 3;
+    const uvNumComponents = 2;
+    geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), positionNumComponents));
+    geometry.addAttribute('normal', new THREE.BufferAttribute(new Float32Array(normals), normalNumComponents));
+    geometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), uvNumComponents));
+    geometry.setIndex(indices);
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
     
-        const positionNumComponents = 3;
-        const normalNumComponents = 3;
-        const uvNumComponents = 2;
-        geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), positionNumComponents));
-        geometry.addAttribute('normal', new THREE.BufferAttribute(new Float32Array(normals), normalNumComponents));
-        geometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), uvNumComponents));
-        geometry.setIndex(indices);
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-    }
+
+    
 
     function randInt(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
@@ -294,7 +295,6 @@ function main() {
         }
 
         world.setVoxel(randInt(0, cellSize), randInt(0, cellSize), randInt(0, cellSize), randInt(1, 17));
-        genrateMesh()
 
         controls.update();
         renderer.render(scene, camera);
