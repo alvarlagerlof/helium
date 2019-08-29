@@ -123,66 +123,66 @@ class VoxelWorld {
 
 VoxelWorld.faces = [
     { // left
-      uvRow: 0,
-      dir: [ -1,  0,  0, ],
-      corners: [
-        { pos: [ 0, 1, 0 ], uv: [ 0, 1 ], },
-        { pos: [ 0, 0, 0 ], uv: [ 0, 0 ], },
-        { pos: [ 0, 1, 1 ], uv: [ 1, 1 ], },
-        { pos: [ 0, 0, 1 ], uv: [ 1, 0 ], },
-      ],
+        uvRow: 0,
+        dir: [ -1,  0,  0, ],
+        corners: [
+            { pos: [ 0, 1, 0 ], uv: [ 0, 1 ], },
+            { pos: [ 0, 0, 0 ], uv: [ 0, 0 ], },
+            { pos: [ 0, 1, 1 ], uv: [ 1, 1 ], },
+            { pos: [ 0, 0, 1 ], uv: [ 1, 0 ], },
+        ],
     },
     { // right
-      uvRow: 0,
-      dir: [  1,  0,  0, ],
-      corners: [
-        { pos: [ 1, 1, 1 ], uv: [ 0, 1 ], },
-        { pos: [ 1, 0, 1 ], uv: [ 0, 0 ], },
-        { pos: [ 1, 1, 0 ], uv: [ 1, 1 ], },
-        { pos: [ 1, 0, 0 ], uv: [ 1, 0 ], },
-      ],
+        uvRow: 0,
+        dir: [  1,  0,  0, ],
+        corners: [
+            { pos: [ 1, 1, 1 ], uv: [ 0, 1 ], },
+            { pos: [ 1, 0, 1 ], uv: [ 0, 0 ], },
+            { pos: [ 1, 1, 0 ], uv: [ 1, 1 ], },
+            { pos: [ 1, 0, 0 ], uv: [ 1, 0 ], },
+        ],
     },
     { // bottom
-      uvRow: 1,
-      dir: [  0, -1,  0, ],
-      corners: [
-        { pos: [ 1, 0, 1 ], uv: [ 1, 0 ], },
-        { pos: [ 0, 0, 1 ], uv: [ 0, 0 ], },
-        { pos: [ 1, 0, 0 ], uv: [ 1, 1 ], },
-        { pos: [ 0, 0, 0 ], uv: [ 0, 1 ], },
-      ],
+        uvRow: 1,
+        dir: [  0, -1,  0, ],
+        corners: [
+            { pos: [ 1, 0, 1 ], uv: [ 1, 0 ], },
+            { pos: [ 0, 0, 1 ], uv: [ 0, 0 ], },
+            { pos: [ 1, 0, 0 ], uv: [ 1, 1 ], },
+            { pos: [ 0, 0, 0 ], uv: [ 0, 1 ], },
+        ],
     },
     { // top
-      uvRow: 2,
-      dir: [  0,  1,  0, ],
-      corners: [
-        { pos: [ 0, 1, 1 ], uv: [ 1, 1 ], },
-        { pos: [ 1, 1, 1 ], uv: [ 0, 1 ], },
-        { pos: [ 0, 1, 0 ], uv: [ 1, 0 ], },
-        { pos: [ 1, 1, 0 ], uv: [ 0, 0 ], },
-      ],
+        uvRow: 2,
+        dir: [  0,  1,  0, ],
+        corners: [
+            { pos: [ 0, 1, 1 ], uv: [ 1, 1 ], },
+            { pos: [ 1, 1, 1 ], uv: [ 0, 1 ], },
+            { pos: [ 0, 1, 0 ], uv: [ 1, 0 ], },
+            { pos: [ 1, 1, 0 ], uv: [ 0, 0 ], },
+        ],
     },
     { // back
-      uvRow: 0,
-      dir: [  0,  0, -1, ],
-      corners: [
-        { pos: [ 1, 0, 0 ], uv: [ 0, 0 ], },
-        { pos: [ 0, 0, 0 ], uv: [ 1, 0 ], },
-        { pos: [ 1, 1, 0 ], uv: [ 0, 1 ], },
-        { pos: [ 0, 1, 0 ], uv: [ 1, 1 ], },
-      ],
+        uvRow: 0,
+        dir: [  0,  0, -1, ],
+        corners: [
+            { pos: [ 1, 0, 0 ], uv: [ 0, 0 ], },
+            { pos: [ 0, 0, 0 ], uv: [ 1, 0 ], },
+            { pos: [ 1, 1, 0 ], uv: [ 0, 1 ], },
+            { pos: [ 0, 1, 0 ], uv: [ 1, 1 ], },
+        ],
     },
     { // front
-      uvRow: 0,
-      dir: [  0,  0,  1, ],
-      corners: [
-        { pos: [ 0, 0, 1 ], uv: [ 0, 0 ], },
-        { pos: [ 1, 0, 1 ], uv: [ 1, 0 ], },
-        { pos: [ 0, 1, 1 ], uv: [ 0, 1 ], },
-        { pos: [ 1, 1, 1 ], uv: [ 1, 1 ], },
-      ],
+        uvRow: 0,
+        dir: [  0,  0,  1, ],
+        corners: [
+            { pos: [ 0, 0, 1 ], uv: [ 0, 0 ], },
+            { pos: [ 1, 0, 1 ], uv: [ 1, 0 ], },
+            { pos: [ 0, 1, 1 ], uv: [ 0, 1 ], },
+            { pos: [ 1, 1, 1 ], uv: [ 1, 1 ], },
+        ],
     },
-  ];
+];
 
 function main() {
     const canvas = document.querySelector('#c');
@@ -239,12 +239,11 @@ function main() {
                 //world.setVoxel(x, y, z, randInt(1, 17));
                 const height = (Math.sin(x / cellSize * Math.PI * 2) + Math.sin(z / cellSize * Math.PI * 3)) * (cellSize / 6) + (cellSize / 2);
                 if (y < height) {
-                    world.setVoxel(x, y, z, randInt(1, 17));
+                    //world.setVoxel(x, y, z, randInt(1, 17));
                 }
             }
         }
     }
-    
 
     const {positions, normals, uvs, indices} = world.generateGeometryDataForCell(0, 0, 0);
     const geometry = new THREE.BufferGeometry();
@@ -254,6 +253,69 @@ function main() {
         alphaTest: 0.1,
         transparent: true,
     });
+
+    const cellIdToMesh = {};
+    function updateCellGeometry(x, y, z) {
+      const cellX = Math.floor(x / cellSize);
+      const cellY = Math.floor(y / cellSize);
+      const cellZ = Math.floor(z / cellSize);
+      const cellId = world.computeCellId(x, y, z);
+      let mesh = cellIdToMesh[cellId];
+      if (!mesh) {
+        const geometry = new THREE.BufferGeometry();
+        const positionNumComponents = 3;
+        const normalNumComponents = 3;
+        const uvNumComponents = 2;
+  
+        geometry.addAttribute(
+            'position',
+            new THREE.BufferAttribute(new Float32Array(0), positionNumComponents));
+        geometry.addAttribute(
+            'normal',
+            new THREE.BufferAttribute(new Float32Array(0), normalNumComponents));
+        geometry.addAttribute(
+            'uv',
+            new THREE.BufferAttribute(new Float32Array(0), uvNumComponents));
+  
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.name = cellId;
+        cellIdToMesh[cellId] = mesh;
+        scene.add(mesh);
+        mesh.position.set(cellX * cellSize, cellY * cellSize, cellZ * cellSize);
+      }
+  
+      const {positions, normals, uvs, indices} = world.generateGeometryDataForCell(cellX, cellY, cellZ);
+      const geometry = mesh.geometry;
+      geometry.getAttribute('position').setArray(new Float32Array(positions)).needsUpdate = true;
+      geometry.getAttribute('normal').setArray(new Float32Array(normals)).needsUpdate = true;
+      geometry.getAttribute('uv').setArray(new Float32Array(uvs)).needsUpdate = true;
+      geometry.setIndex(indices);
+      geometry.computeBoundingSphere();
+    }
+
+    const neighborOffsets = [
+        [ 0,  0,  0], // self
+        [-1,  0,  0], // left
+        [ 1,  0,  0], // right
+        [ 0, -1,  0], // down
+        [ 0,  1,  0], // up
+        [ 0,  0, -1], // back
+        [ 0,  0,  1], // front
+    ];
+
+    function updateVoxelGeometry(x, y, z) {
+        const updatedCellIds = {};
+        for (const offset of neighborOffsets) {
+            const ox = x + offset[0];
+            const oy = y + offset[1];
+            const oz = z + offset[2];
+            const cellId = world.computeCellId(ox, oy, oz);
+            if (!updatedCellIds[cellId]) {
+                updatedCellIds[cellId] = true;
+                updateCellGeometry(ox, oy, oz);
+            }
+        }
+    }
 
     const positionNumComponents = 3;
     const normalNumComponents = 3;
@@ -266,7 +328,7 @@ function main() {
     scene.add(mesh);
     
 
-    
+
 
     function randInt(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
@@ -285,6 +347,8 @@ function main() {
 
     let renderRequested = false;
 
+
+
     function render() {
         renderRequested = undefined;
 
@@ -295,10 +359,13 @@ function main() {
         }
 
         world.setVoxel(randInt(0, cellSize), randInt(0, cellSize), randInt(0, cellSize), randInt(1, 17));
+        updateVoxelGeometry(randInt(0, cellSize), randInt(0, cellSize), randInt(0, cellSize));
+        requestRenderIfNotRequested();
 
         controls.update();
         renderer.render(scene, camera);
     }
+
     render();
 
     function requestRenderIfNotRequested() {
