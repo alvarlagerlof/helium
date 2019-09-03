@@ -126,9 +126,9 @@ class Scene {
     async addRandomCell() {
         this.world.clear();
 
-        let cellX = randInt(0, 20);
-        let cellY = randInt(0, 20);
-        let cellZ = randInt(0, 20);
+        let cellX = randInt(0, 10);
+        let cellY = randInt(0, 10);
+        let cellZ = randInt(0, 10);
         
     
         for (var i = 0; i < 100; i++) {
@@ -243,7 +243,9 @@ class Scene {
             this.camera.updateProjectionMatrix();
         }
 
-        this.addRandomCell();
+        for (var i = 0; i < 20; i++) {
+            this.addRandomCell();
+        }
 
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
