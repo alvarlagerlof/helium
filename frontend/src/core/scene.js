@@ -5,6 +5,8 @@ class Scene {
     constructor() {
         this.renderRequested = false;
 
+        this.offset = 0;
+
         this.options = {
             cellSize: 16,
             worldSize: 16,
@@ -93,15 +95,13 @@ class Scene {
         });
 
         // Handle resizing of the browser window
-        this.controls.addEventListener('change', this.requestRenderIfNotRequested);
-        window.addEventListener('resize', this.requestRenderIfNotRequested);
+        this.controls.addEventListener('change', () => this.requestRenderIfNotRequested());
+        window.addEventListener('resize', () => this.requestRenderIfNotRequested());
 
         // Start render cycle
         this.render();
 
-        // while (true) {
-        //     this.addRandomCell();
-        // }
+        this.addRandomCell();
 
     }
 
@@ -124,47 +124,76 @@ class Scene {
     }
 
     async addRandomCell() {
-        this.world.clear();
+        await this.world.clear();
 
-        let cellX = randInt(0, 10);
-        let cellY = randInt(0, 10);
-        let cellZ = randInt(0, 10);
+        const scale = 2;
+
+        for (let y = 0; y < this.options.cellSize*scale; ++y) {
+            for (let z = 0; z < this.options.cellSize*scale; ++z) {
+                for (let x = 0; x < this.options.cellSize*scale; ++x) {
+                    const height = (Math.sin((x+this.offset) / this.options.cellSize * Math.PI * 1.2) + Math.sin((z+this.offset) / this.options.cellSize * Math.PI * 1.2)) * (this.options.cellSize / 6) + (this.options.cellSize / 2);
+                    if (y < height) {
+                        await this.world.setVoxel(x, y, z, Math.round(height));
+                    }
+                }
+            }
+        }
+
+        for (let y = 0; y < scale; ++y) {
+            for (let z = 0; z < scale; ++z) {
+                for (let x = 0; x < scale; ++x) {
+                    await this.updateCellGeometry(x*this.options.cellSize, y*this.options.cellSize, z*this.options.cellSize);
+                }
+            }
+        }
+
+        this.offset += 1;
+
+
+
+        // const cellX = randInt(0, 10);
+        // const cellY = randInt(0, 10);
+        // const cellZ = randInt(0, 10);
+                
+        // for (var i = 0; i < 100; i++) {
+        //     let x = cellX*this.options.cellSize + randInt(0, this.options.cellSize);
+        //     let y = cellY*this.options.cellSize + randInt(0, this.options.cellSize);
+        //     let z = cellZ*this.options.cellSize + randInt(0, this.options.cellSize);
+        //     this.world.setVoxel(x, y, z, block);
+        // }
+
+        // for (var i = 0; i < this.options.cellSize; i++) {
+        //     const block = 13;
+
+        //     this.world.setVoxel(
+        //         cellX*this.options.cellSize + i, 
+        //         cellY*this.options.cellSize, 
+        //         cellZ*this.options.cellSize, 
+        //         block
+        //     );
+
+        //     this.world.setVoxel(
+        //         cellX*this.options.cellSize, 
+        //         cellY*this.options.cellSize + i, 
+        //         cellZ*this.options.cellSize, 
+        //         block
+        //     );
+
+        //     this.world.setVoxel(
+        //         cellX*this.options.cellSize, 
+        //         cellY*this.options.cellSize, 
+        //         cellZ*this.options.cellSize + i, 
+        //         block
+        //     );
+        // }
+
+        //this.updateCellGeometry(cellX*this.options.cellSize, cellY*this.options.cellSize, cellZ*this.options.cellSize);
+
+        setTimeout(() => {
+            this.addRandomCell();
+            this.requestRenderIfNotRequested();
+        }, 1000/60);
         
-    
-        for (var i = 0; i < 100; i++) {
-            let x = cellX*this.options.cellSize + randInt(0, this.options.cellSize);
-            let y = cellY*this.options.cellSize + randInt(0, this.options.cellSize);
-            let z = cellZ*this.options.cellSize + randInt(0, this.options.cellSize);
-            this.world.setVoxel(x, y, z, randInt(1, 17));
-        }
-
-        for (var i = 0; i < this.options.cellSize; i++) {
-            const block = 13;
-
-            // this.world.setVoxel(
-            //     cellX*this.options.cellSize + i, 
-            //     cellY*this.options.cellSize, 
-            //     cellZ*this.options.cellSize, 
-            //     block
-            // );
-
-            // this.world.setVoxel(
-            //     cellX*this.options.cellSize, 
-            //     cellY*this.options.cellSize + i, 
-            //     cellZ*this.options.cellSize, 
-            //     block
-            // );
-
-            // this.world.setVoxel(
-            //     cellX*this.options.cellSize, 
-            //     cellY*this.options.cellSize, 
-            //     cellZ*this.options.cellSize + i, 
-            //     block
-            // );
-        }
-
-        this.updateCellGeometry(cellX*this.options.cellSize, cellY*this.options.cellSize, cellZ*this.options.cellSize);
-        this.requestRenderIfNotRequested();
        
     }
 
@@ -241,10 +270,6 @@ class Scene {
                 this.canvas.style.height = window.innerHeight + "px";
             }, 0);
             this.camera.updateProjectionMatrix();
-        }
-
-        for (var i = 0; i < 20; i++) {
-            this.addRandomCell();
         }
 
         this.controls.update();
