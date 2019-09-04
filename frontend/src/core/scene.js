@@ -131,7 +131,7 @@ class Scene {
         for (let y = 0; y < this.options.cellSize*scale; ++y) {
             for (let z = 0; z < this.options.cellSize*scale; ++z) {
                 for (let x = 0; x < this.options.cellSize*scale; ++x) {
-                    const height = (Math.sin((x+this.offset) / this.options.cellSize * Math.PI * 1.2) + Math.sin((z+this.offset) / this.options.cellSize * Math.PI * 1.2)) * (this.options.cellSize / 6) + (this.options.cellSize / 2);
+                    const height = (Math.sin((x+this.offset) / this.options.cellSize * Math.PI * 1.1) + Math.sin((z+this.offset) / this.options.cellSize * Math.PI * 1.1)) * (this.options.cellSize / 6) + (this.options.cellSize / 2);
                     if (y < height) {
                         await this.world.setVoxel(x, y, z, Math.round(height));
                     }
