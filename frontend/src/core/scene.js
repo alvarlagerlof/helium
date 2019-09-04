@@ -6,6 +6,7 @@ class Scene {
         this.renderRequested = false;
 
         this.offset = 0;
+        this.players = [];
 
         this.options = {
             cellSize: 16,
@@ -64,10 +65,11 @@ class Scene {
             this.options.cellSize / 2
         );
 
-        this.controls.update();
+        //this.controls.update();
 
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color('lightblue');
+        window.scene = this.scene;
 
         // TODO: Do with imports instead
         const loader = new THREE.TextureLoader();
@@ -123,17 +125,17 @@ class Scene {
         this.requestRenderIfNotRequested();
     }
 
-    async addRandomCell() {
-        await this.world.clear();
+    addRandomCell() {
+        this.world.clear();
 
-        const scale = 2;
+        const scale = 5;
 
         for (let y = 0; y < this.options.cellSize*scale; ++y) {
             for (let z = 0; z < this.options.cellSize*scale; ++z) {
                 for (let x = 0; x < this.options.cellSize*scale; ++x) {
                     const height = (Math.sin((x+this.offset) / this.options.cellSize * Math.PI * 1.1) + Math.sin((z+this.offset) / this.options.cellSize * Math.PI * 1.1)) * (this.options.cellSize / 6) + (this.options.cellSize / 2);
                     if (y < height) {
-                        await this.world.setVoxel(x, y, z, Math.round(height));
+                        this.world.setVoxel(x, y, z, Math.round(height));
                     }
                 }
             }
@@ -142,14 +144,12 @@ class Scene {
         for (let y = 0; y < scale; ++y) {
             for (let z = 0; z < scale; ++z) {
                 for (let x = 0; x < scale; ++x) {
-                    await this.updateCellGeometry(x*this.options.cellSize, y*this.options.cellSize, z*this.options.cellSize);
+                    this.updateCellGeometry(x*this.options.cellSize, y*this.options.cellSize, z*this.options.cellSize);
                 }
             }
         }
 
         this.offset += 1;
-
-
 
         // const cellX = randInt(0, 10);
         // const cellY = randInt(0, 10);
@@ -189,10 +189,8 @@ class Scene {
 
         //this.updateCellGeometry(cellX*this.options.cellSize, cellY*this.options.cellSize, cellZ*this.options.cellSize);
 
-        setTimeout(() => {
-            this.addRandomCell();
-            this.requestRenderIfNotRequested();
-        }, 1000/60);
+        //this.addRandomCell();
+        //this.requestRenderIfNotRequested();
         
        
     }
@@ -249,6 +247,48 @@ class Scene {
         }
     }
 
+    onEvent(type, player) {
+        console.log(type, player)
+        let p = player;
+        switch (type) {
+            case "PLAYER_ADD":
+                if (this.players.filter(x => x.uuid == p.uuid).length == 0) {
+                    let geometry = new THREE.BoxGeometry( 1, 2, 1 );
+                    let material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+                    let cube = new THREE.Mesh( geometry, material );
+
+                    cube.position.x = p.x;
+                    cube.position.y = p.y;
+                    cube.position.z = p.z;
+
+                    cube.add(this.camera);
+                    this.camera.position.set( 0, 4, -8 );
+
+
+                    this.players.push({...p, ...{cube}});
+                    this.scene.add(cube);
+                }
+                break;
+            case "PLAYER_REMOVE": 
+                this.players = this.players.filter(x => x.uuid != p.uuid);
+                this.scene.remove(this.players.find(x => x.uuid == p.uuid).cube)
+                break;
+            case "PLAYER_UPDATE":
+                let cube = this.players.find(x => x.uuid == p.uuid).cube;
+                this.players[this.players.findIndex(el => el.uuid == p.uuid)] = {...p, ...{cube}};
+                let player = this.players[this.players.findIndex(el => el.uuid == p.uuid)];
+                player.cube.position.x = player.x;
+                player.cube.position.y = player.y - 60;
+                player.cube.position.z = player.z;
+                player.cube.rotation.y = player.yaw * Math.PI/-180;
+                player.cube.geometry.computeBoundingSphere();
+
+
+                this.camera.lookAt(player.cube.position);
+                break;
+        }
+        this.requestRenderIfNotRequested();
+    }
 
     requestRenderIfNotRequested() {
         if (!this.renderRequested) {
@@ -272,7 +312,7 @@ class Scene {
             this.camera.updateProjectionMatrix();
         }
 
-        this.controls.update();
+        //this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
 }
