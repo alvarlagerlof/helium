@@ -1,6 +1,7 @@
 import { randInt } from "../utils/math-utils";
 import VoxelWorld from "./voxel-world"
 
+
 class Scene {
     constructor() {
         this.renderRequested = false;
@@ -59,13 +60,23 @@ class Scene {
             this.canvas
         );
 
-        this.controls.target.set(
-            this.options.cellSize / 2, 
-            this.options.cellSize / 3, 
-            this.options.cellSize / 2
-        );
+        this.controls.enableDamping = true;   //damping 
+        this.controls.dampingFactor = 0.25;   //damping inertia
+        this.controls.enableZoom = true;      //Zooming
+        this.controls.enablePan = false;
 
-        //this.controls.update();
+        this.controls.keys = {
+            LEFT: 37, //left arrow
+            UP: 38, // up arrow
+            RIGHT: 39, // right arrow
+            BOTTOM: 40 // down arrow
+        };
+
+
+        this.controls.rotateSpeed = 0.4;
+        this.controls.zoomSpeed = 1.2;
+
+        this.controls.update();
 
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color('lightblue');
@@ -248,7 +259,7 @@ class Scene {
     }
 
     onEvent(type, player) {
-        console.log(type, player)
+        //console.log(type, player)
         let p = player;
         switch (type) {
             case "PLAYER_ADD":
@@ -261,30 +272,38 @@ class Scene {
                     cube.position.y = p.y;
                     cube.position.z = p.z;
 
-                    cube.add(this.camera);
-                    this.camera.position.set( 0, 4, -8 );
-
 
                     this.players.push({...p, ...{cube}});
                     this.scene.add(cube);
+                    this.players.find(x => x.uuid == p.uuid).cube.add(this.camera);
+
                 }
                 break;
             case "PLAYER_REMOVE": 
                 this.players = this.players.filter(x => x.uuid != p.uuid);
+                console.log(this.players.find(x => x.uuid == p.uuid))
                 this.scene.remove(this.players.find(x => x.uuid == p.uuid).cube)
                 break;
             case "PLAYER_UPDATE":
-                let cube = this.players.find(x => x.uuid == p.uuid).cube;
-                this.players[this.players.findIndex(el => el.uuid == p.uuid)] = {...p, ...{cube}};
-                let player = this.players[this.players.findIndex(el => el.uuid == p.uuid)];
-                player.cube.position.x = player.x;
-                player.cube.position.y = player.y - 60;
-                player.cube.position.z = player.z;
-                player.cube.rotation.y = player.yaw * Math.PI/-180;
-                player.cube.geometry.computeBoundingSphere();
+                let fp = this.players.find(x => x.uuid == p.uuid);
+                if (fp && fp.cube) {
+                    let cube = fp.cube;
+                    this.players[this.players.findIndex(el => el.uuid == p.uuid)] = {...p, ...{cube}};
+                    cube.position.x = player.x;
+                    cube.position.y = player.y - 60;
+                    cube.position.z = player.z;
+                    cube.rotation.y = player.yaw * Math.PI/-180;
+                    cube.geometry.computeBoundingSphere();
 
+                    this.controls.target.set(
+                        cube.position.x, 
+                        cube.position.y, 
+                        cube.rotation.y
+                    );
 
-                this.camera.lookAt(player.cube.position);
+    
+                }
+                
                 break;
         }
         this.requestRenderIfNotRequested();
@@ -312,7 +331,7 @@ class Scene {
             this.camera.updateProjectionMatrix();
         }
 
-        //this.controls.update();
+        this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
 }
