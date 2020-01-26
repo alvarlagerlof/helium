@@ -1,4 +1,4 @@
-# Helium
+# 🗺 Helium
 Real-time online 3d map for Spigot
 
 ## Installation
