@@ -1,5 +1,5 @@
 # Helium
-🗺 Real-time online 3d map for Spigot
+Real-time online 3d map for Spigot
 
 ## Installation
 TBD
